@@ -12,6 +12,14 @@ if (window.performance.now) {
     }
 }
 
+function initCPU()
+{
+    // Start delayTimer countdown
+    startAnimating(60, timerInterval);
+
+    initFont();
+}
+
 // Method to set all values of an array
 Array.prototype.setAll = function(v) {
     var i, n = this.length;
@@ -345,6 +353,74 @@ function parse_opcode(opcode)
     
 }
 
+// let temp = 0;
+// // let a = getTimestamp();
+// // setTimeout(()=>{let b = getTimestamp();console.log(b-a)}, 100);
+// function step(timestamp) {
+//     // do something for every frame
+//     //   if(timestamp % 16.666 <= .09)
+//     //   {
 
-let a = getTimestamp();
-setTimeout(()=>{let b = getTimestamp();console.log(b-a)}, 100);
+//     //   }
+//     let fart = Math.round(timestamp * 100);
+//     console.log(Math.round((fart - temp) % 16.666));
+//     temp = fart;
+//     window.requestAnimationFrame(step);
+// }
+// window.requestAnimationFrame(step);
+
+
+
+
+
+
+// initialize the timer variables and start the animation
+var fps, fpsInterval, startTime, now, then, elapsed;
+var audio = new Audio('beep.wav');
+audio.loop = true;
+audio.load();
+
+function startAnimating(fps, callback) {
+    fpsInterval = 1000 / fps;
+    then = Date.now();
+    startTime = then;
+    callback();
+}
+
+// the animation loop calculates time elapsed since the last loop
+// and only draws if your specified fps interval is achieved
+
+function timerInterval() {
+
+    // request another frame
+    requestAnimationFrame(timerInterval);
+
+    // calc elapsed time since last loop
+    now = Date.now();
+    elapsed = now - then;
+
+    // if enough time has elapsed, draw the next frame
+    if (elapsed > fpsInterval) {
+
+        // Get ready for next frame by setting then=now, but also adjust for your
+        // specified fpsInterval not being a multiple of RAF's interval (16.7ms)
+        then = now - (elapsed % fpsInterval);
+
+        // if timer is not 0, subtract 1
+        // Delay timer
+        if(timers[0] > 0)
+        {
+            timers[0]--;
+        }
+        // Sound timer
+        if(timers[1] > 0)
+        {
+            audio.play();
+            timers[1]--;
+        }
+        else
+        {
+            audio.pause()
+        }
+    }
+}
